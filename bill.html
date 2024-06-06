@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel Bill Calculator</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f2f2f2;
+    }
+    #container {
+        width: 80%;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        position: relative;
+        background-image: url(hotel.jpg);
+        background-size: cover;
+        background-position: center;
+    }
+    h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+    .marquee {
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        animation: marquee 20s linear infinite;
+    }
+    .marquee img {
+        margin-right: 10px;
+    }
+    @keyframes marquee {
+        0% { transform: translateX(0%); }
+        100% { transform: translateX(-100%); }
+    }
+    .dishImage {
+        width: 150px;
+        height: 100px;
+        border-radius: 5px;
+        overflow: hidden;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+    #items {
+        margin-bottom: 20px;
+    }
+    .item {
+        margin-bottom: 10px;
+    }
+    .item span {
+        display: inline-block;
+        background-color: #f2f2f2;
+        padding: 8px 12px;
+        border-radius: 5px;
+    }
+    .item input {
+        width: 50px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 5px;
+    }
+    #roomType {
+        margin-bottom: 20px;
+    }
+    #roomType label {
+        font-weight: bold;
+    }
+    #roomType select {
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        width: 100%;
+        margin-top: 5px;
+    }
+    #orderSummary {
+        margin-bottom: 20px;
+    }
+    #orderSummary table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    #orderSummary th, #orderSummary td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+    #orderSummary th {
+        background-color: #f2f2f2;
+    }
+    #gstAmount, #total {
+        font-weight: bold;
+        font-size: 16px;
+        color: #4CAF50;
+    }
+    button {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+</style>
+</head>
+<body>
+<div id="container">
+    <h1>Hotel Bill Calculator</h1>
+    <div id="dishImages" class="marquee">
+        <img class="dishImage" src="dish1.jpg" alt="Dish 1">
+        <img class="dishImage" src="dish2.jpg" alt="Dish 2">
+        <img class="dishImage" src="dish3.jpg" alt="Dish 3">
+        <img class="dishImage" src="dish4.jpg" alt="Dish 4">
+        <img class="dishImage" src="dish5.jpg" alt="Dish 5">
+        <img class="dishImage" src="dish6.jpg" alt="Dish 6">
+        <img class="dishImage" src="dish7.jpg" alt="Dish 7">
+        <img class="dishImage" src="dish8.jpg" alt="Dish 8">
+    </div>
+    <div id="items">
+        <div class="item">
+            <span>Burger - ₹35</span>
+            <input type="number" id="burgerQuantity" min="0" value="0">
+        </div>
+        <div class="item">
+            <span>Pizza - ₹70</span>
+            <input type="number" id="pizzaQuantity" min="0" value="0">
+        </div>
+        <div class="item">
+            <span>Salad - ₹49</span>
+            <input type="number" id="saladQuantity" min="0" value="0">
+        </div>
+        <div class="item">
+            <span>Pasta - ₹56</span>
+            <input type="number" id="pastaQuantity" min="0" value="0">
+        </div>
+        <div class="item">
+            <span>Sandwich - ₹42</span>
+            <input type="number" id="sandwichQuantity" min="0" value="0">
+        </div>
+        <div class="item">
+            <span>Steak - ₹90</span>
+            <input type="number" id="steakQuantity" min="0" value="0">
+        </div>
+        <div class="item">
+            <span>Soup - ₹25</span>
+            <input type="number" id="soupQuantity" min="0" value="0">
+        </div>
+        <div class="item">
+            <span>Pancake - ₹40</span>
+            <input type="number" id="pancakeQuantity" min="0" value="0">
+        </div>
+        <div class="item">
+            <span>Fries - ₹20</span>
+            <input type="number" id="friesQuantity" min="0" value="0">
+        </div>
+    </div>
+    <div id="roomType">
+        <label for="room">Room Type:</label>
+        <select id="room">
+            <option value="non-ac">Non-AC</option>
+            <option value="ac">AC</option>
+        </select>
+    </div>
+    <button onclick="calculateTotal()">Calculate Total</button>
+    <button onclick="reset()">Reset</button>
+    <div id="orderSummary">
+        <h2>Order Summary</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody id="summaryTableBody"></tbody>
+        </table>
+        <div id="gstAmount"></div>
+        <div id="total"></div>
+    </div>
+</div>
+<script>
+    function calculateTotal() {
+        var items = [
+            { name: "Burger", price: 35, quantity: parseInt(document.getElementById('burgerQuantity').value) },
+            { name: "Pizza", price: 70, quantity: parseInt(document.getElementById('pizzaQuantity').value) },
+            { name: "Salad", price: 49, quantity: parseInt(document.getElementById('saladQuantity').value) },
+            { name: "Pasta", price: 56, quantity: parseInt(document.getElementById('pastaQuantity').value) },
+            { name: "Sandwich", price: 42, quantity: parseInt(document.getElementById('sandwichQuantity').value) },
+            { name: "Steak", price: 90, quantity: parseInt(document.getElementById('steakQuantity').value) },
+            { name: "Soup", price: 25, quantity: parseInt(document.getElementById('soupQuantity').value) },
+            { name: "Pancake", price: 40, quantity: parseInt(document.getElementById('pancakeQuantity').value) },
+            { name: "Fries", price: 20, quantity: parseInt(document.getElementById('friesQuantity').value) }
+        ];
+        var roomType = document.getElementById('room').value;
+        var gstPercentage = 15; // 15% GST
+        var acChargePercentage = roomType === "ac" ? 10 : 0; // 10% extra charge for AC room
+        var summaryTableBody = document.getElementById('summaryTableBody');
+        summaryTableBody.innerHTML = "";
+        var totalWithoutGST = 0;
+        var total = 0;
+        items.forEach(item => {
+            if (item.quantity > 0) {
+                var row = summaryTableBody.insertRow();
+                var nameCell = row.insertCell(0);
+                var quantityCell = row.insertCell(1);
+                var priceCell = row.insertCell(2);
+
+                nameCell.textContent = item.name;
+                quantityCell.textContent = item.quantity;
+                priceCell.textContent = "₹" + (item.price * item.quantity).toFixed(2);
+
+                totalWithoutGST += item.price * item.quantity;
+                total += item.price * item.quantity * (1 + gstPercentage / 100 + acChargePercentage / 100);
+            }
+        });
+        var gstAmount = total - totalWithoutGST;
+        document.getElementById('gstAmount').textContent = "GST (15%): ₹" + gstAmount.toFixed(2);
+        document.getElementById('total').textContent = "Total Bill (including GST): ₹" + total.toFixed(2);
+    }
+    function reset() {
+        var inputs = document.querySelectorAll('input[type="number"]');
+        inputs.forEach(input => {
+            input.value = 0;
+        });
+        document.getElementById('summaryTableBody').innerHTML = "";
+        document.getElementById('gstAmount').textContent = "";
+        document.getElementById('total').textContent = "";
+    }
+</script>
+</body>
+</html
